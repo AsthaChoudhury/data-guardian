@@ -1,0 +1,53 @@
+# Build & Dependencies
+target/
+build/
+*.class
+*.jar
+*.war
+venv/
+env/
+__pycache__/
+*.pyc
+*.pyo
+.Python
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Logs
+logs/
+*.log
+
+# Temporary
+tmp/
+temp/
+.tmp/
+
+# Spark
+checkpoint_*
+/tmp/dg_checkpoint
+
+# Redis
+*.rdb
+dump.rdb
+
+# OS
+.DS_Store
+Thumbs.db
+
+.env
+.env.*
+
+venv/
+.venv/
+.github/

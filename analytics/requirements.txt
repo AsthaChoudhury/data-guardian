@@ -1,0 +1,17 @@
+# Streaming & Data Processing
+pyspark==3.4.0
+kafka-python==2.0.2
+
+# Caching
+redis==4.5.4
+
+# Configuration
+python-dotenv==1.0.0
+
+# Testing
+pytest==7.3.1
+requests==2.31.0
+
+# Utilities
+numpy==1.24.3
+pandas==2.0.2
