@@ -312,7 +312,3 @@ environment:
 ## License
 
 MIT
-
-## Contact
-
-For questions/issues: [your-email]
