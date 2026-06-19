@@ -97,7 +97,7 @@ A production-grade backend system for real-time data quality assessment using Py
 ### 1. Clone & Setup
 
 ```bash
-git clone <repo>
+git clone https://github.com/AsthaChoudhury/data-guardian.git
 cd data-guardian
 
 # Create Python virtual environment
