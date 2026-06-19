@@ -268,7 +268,7 @@ docker exec redis redis-cli KEYS "dg:*"
 docker exec redis redis-cli GET "dg:daily_metrics:Hospital_A"
 ```
 
-## Next Steps (Frontend)
+## Next Steps (Frontend) (in progress)
 
 To add React dashboard:
 1. Create `dashboard/` directory
