@@ -1,6 +1,6 @@
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import (
-    from_json, col, struct, to_json, when, current_timestamp, lit,
+    from_json, col, struct, to_json, to_timestamp, when, current_timestamp, lit,
     abs, avg, stddev, lag, count, concat_ws, window
 )
 import json
@@ -73,8 +73,13 @@ class DataQualityStreamingEngine:
 
         df_parsed = df_raw.select(
             from_json(col("value").cast("string"), self.schema).alias("data")
-        ).select("data.*") \
-            .withColumn("ingestion_time", current_timestamp())
+        ).select("data.*")
+
+        df_parsed = df_parsed.withColumn("ingestion_time", current_timestamp())
+        df_parsed = df_parsed.withColumn(
+            "timestamp",
+            to_timestamp(col("timestamp"), "yyyy-MM-dd'T'HH:mm:ss")
+        )
 
         return df_parsed
 
