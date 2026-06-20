@@ -1,0 +1,22 @@
+completeness:
+  required_fields:
+    - patient_id
+    - hospital
+    - age
+    - bp_systolic
+
+validity:
+  age:
+    min: 0
+    max: 120
+
+  bp_systolic:
+    min: 70
+    max: 250
+
+  temperature:
+    min: 35
+    max: 42
+
+anomaly_detection:
+  z_score_threshold: 3

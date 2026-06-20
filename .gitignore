@@ -51,3 +51,14 @@ Thumbs.db
 venv/
 .venv/
 .github/
+venv/
+target/
+.idea/
+.vscode/
+
+__pycache__/
+*.pyc
+
+.env
+
+*.log

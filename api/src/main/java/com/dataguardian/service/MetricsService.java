@@ -1,5 +1,6 @@
 package com.dataguardian.service;
 
+import com.dataguardian.constants.RedisKeys;
 import com.dataguardian.model.DailyMetrics;
 import com.dataguardian.model.Issue;
 import com.dataguardian.model.Trend;
@@ -21,7 +22,7 @@ public class MetricsService {
     private final ObjectMapper objectMapper;
 
     public DailyMetrics getDailyMetricsForHospital(String hospital) {
-        String key = "dg:daily_metrics:" + hospital;
+        String key = String.format(RedisKeys.DAILY_METRICS, hospital);
         Object cached = redisTemplate.opsForValue().get(key);
 
         if (cached == null) {

@@ -1,32 +1,58 @@
+# spring:
+#     application:
+#         name: data-guardian-api
+
+#     data:
+#         redis:
+#             host: localhost
+#             port: 6379
+#             database: 0
+#             timeout: 60000ms
+
+#     kafka:
+#         bootstrap-servers: localhost:9092
+#         consumer:
+#             group-id: data-guardian-api
+#             auto-offset-reset: earliest
+
+# server:
+#     port: 8080
+#     servlet:
+#         context-path: /api
+
+# logging:
+#     level:
+#         root: INFO
+#         com.dataguardian: DEBUG
+
+# management:
+#     endpoints:
+#         web:
+#             exposure:
+#                 include: health,metrics
+
 spring:
     application:
         name: data-guardian-api
 
     data:
         redis:
-            host: localhost
-            port: 6379
-            database: 0
+            host: ${REDIS_HOST}
+            port: ${REDIS_PORT}
+            database: ${REDIS_DB}
             timeout: 60000ms
 
     kafka:
-        bootstrap-servers: localhost:9092
+        bootstrap-servers: ${KAFKA_BROKERS}
         consumer:
             group-id: data-guardian-api
             auto-offset-reset: earliest
 
 server:
-    port: 8080
+    port: ${API_PORT}
     servlet:
         context-path: /api
 
 logging:
     level:
-        root: INFO
-        com.dataguardian: DEBUG
-
-management:
-    endpoints:
-        web:
-            exposure:
-                include: health,metrics
+        root: ${LOG_LEVEL}

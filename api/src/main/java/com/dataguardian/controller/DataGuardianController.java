@@ -53,19 +53,10 @@ public class DataGuardianController {
     }
 
     @GetMapping("/metrics")
-    public ResponseEntity<?> getAllMetrics() {
-        try {
-            List<DailyMetrics> metrics = metricsService.getAllMetrics();
+    public ResponseEntity<List<DailyMetrics>> getAllMetrics() {
 
-            Map<String, Object> response = new HashMap<>();
-            response.put("count", metrics.size());
-            response.put("metrics", metrics);
-
-            return ResponseEntity.ok(response);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(Collections.emptyList());
-        }
+        return ResponseEntity.ok(
+                metricsService.getAllMetrics());
     }
 
     @GetMapping("/status")

@@ -8,6 +8,8 @@ from pyspark.sql.types import BooleanType, StructType, StructField, StringType, 
 import json
 import redis
 from datetime import datetime, timedelta
+from analytics.constants.redis_keys import RedisKeys
+from analytics.core.spark_session import create_spark_session
 from config import config
 
 
@@ -18,10 +20,12 @@ class BatchAnalyticsEngine:
         print("=" * 80 + "\n")
 
         # Spark session
-        self.spark = SparkSession.builder \
-            .appName("DataGuardian-BatchAnalytics") \
-            .master(config.SPARK_MASTER) \
-            .getOrCreate()
+        # self.spark = SparkSession.builder \
+        #     .appName("DataGuardian-BatchAnalytics") \
+        #     .master(config.SPARK_MASTER) \
+        #     .getOrCreate()
+
+        self.spark = create_spark_session()
 
         self.spark.sparkContext.setLogLevel("WARN")
 
@@ -38,37 +42,29 @@ class BatchAnalyticsEngine:
             self.redis_client = None
 
     def load_raw_assessments(self, run_date):
+
         print(f"[1/5] Loading raw assessments for {run_date}...")
-        sample_data = [
-            ("Hospital_A", "PAT_001", 45, 130, 36.5, 100, True, run_date),
-            ("Hospital_A", "PAT_002", -5, 120, 36.8, 50, False, run_date),
-            ("Hospital_B", "PAT_003", 62, 150, 37.0, 95, True, run_date),
-            ("Hospital_B", "PAT_004", 58, 300, 36.9, 50, False, run_date),
-            ("Hospital_C", "PAT_005", 71, 140, 45.5, 50, False, run_date),
-        ]
 
-        schema = StructType([
-            StructField("hospital", StringType()),
-            StructField("patient_id", StringType()),
-            StructField("age", IntegerType()),
-            StructField("bp_systolic", IntegerType()),
-            StructField("temperature", DoubleType()),
-            StructField("quality_score", IntegerType()),
-            StructField("has_issues", BooleanType()),
-            StructField("date", StringType())
-        ])
+        df = self.spark.read.parquet(
+            config.DATA_LAKE_PATH
+        )
 
-        df = self.spark.createDataFrame(sample_data, schema)
-
-        print(f"    Loaded {df.count()} records\n")
+        print(f"Loaded {df.count()} records")
 
         return df
 
     def calculate_daily_metrics(self, df):
 
         print("[2/5] Calculating daily metrics...")
+        df = df.withColumn(
+            "date",
+            to_date(col("ingestion_time"))
+        )
 
-        daily_metrics = df.groupBy("hospital", "date").agg(
+        daily_metrics = df.groupBy(
+            "hospital",
+            "date"
+        ).agg(
             count("*").alias("total_records"),
             sum(when(col("has_issues") == 1, 1)).alias("records_with_issues"),
             avg("quality_score").alias("avg_quality_score"),
@@ -228,7 +224,7 @@ class BatchAnalyticsEngine:
                 }
 
                 self.redis_client.setex(
-                    f"dg:daily_metrics:{hospital}",
+                    RedisKeys.DAILY_METRICS.format(hospital),
                     86400,  # 24 hour TTL
                     json.dumps(data)
                 )
