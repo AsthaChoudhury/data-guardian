@@ -8,8 +8,8 @@ from pyspark.sql.types import BooleanType, StructType, StructField, StringType, 
 import json
 import redis
 from datetime import datetime, timedelta
-from analytics.constants.redis_keys import RedisKeys
-from analytics.core.spark_session import create_spark_session
+from constants.redis_keys import RedisKeys
+from core.spark_session import create_spark_session
 from config import config
 
 
@@ -271,4 +271,4 @@ class BatchAnalyticsEngine:
 
 if __name__ == "__main__":
     analytics = BatchAnalyticsEngine()
-    analytics.run()
+    run()

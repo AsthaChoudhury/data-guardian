@@ -3,14 +3,14 @@ import json
 import time
 import random
 from datetime import datetime
-from config import config
+from config.settings import settings
 
 
 class PatientDataGenerator:
 
     def __init__(self):
         self.producer = KafkaProducer(
-            bootstrap_servers=config.KAFKA_BROKERS,
+            bootstrap_servers=settings.KAFKA_BROKERS,
             value_serializer=lambda v: json.dumps(v).encode('utf-8'),
             acks='all',
             api_version=(2, 5, 0)
@@ -102,8 +102,8 @@ class PatientDataGenerator:
 
         print("=" * 80)
         print(f"DataGuardian: Patient Data Generator")
-        print(f"Kafka: {config.KAFKA_BROKERS}")
-        print(f"Topic: {config.KAFKA_RAW_TOPIC}")
+        print(f"Kafka: {settings.KAFKA_BROKERS}")
+        print(f"Topic: {settings.KAFKA_RAW_TOPIC}")
         print(f"Records: {num_records}")
         print(f"Error Rate: {error_rate*100}%")
         print("=" * 80)
@@ -118,7 +118,7 @@ class PatientDataGenerator:
                     patient_num=i,
                     inject_error=has_error
                 )
-                self.producer.send(config.KAFKA_RAW_TOPIC, record)
+                self.producer.send(settings.KAFKA_RAW_TOPIC, record)
 
                 self.record_count += 1
                 if has_error:

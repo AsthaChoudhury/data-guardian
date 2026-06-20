@@ -1,14 +1,18 @@
-FROM python:3.9-slim
+FROM python:3.9-bullseye
 
 WORKDIR /app
 
 RUN apt-get update && apt-get install -y \
-    openjdk-11-jre \
+    openjdk-17-jre-headless \
     && rm -rf /var/lib/apt/lists/*
 
+ENV JAVA_HOME=/usr/lib/jvm/java-17-openjdk-arm64
+
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --default-timeout=1000 --no-cache-dir -r requirements.txt
 
 COPY . .
 
-CMD ["python", "streaming_engine.py"]
+ENV PYTHONPATH=/app
+
+CMD ["python", "jobs/streaming_engine.py"]
